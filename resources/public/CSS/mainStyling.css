@@ -1,0 +1,19 @@
+body {
+  width: 90%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+a {
+  text-decoration: none;
+}
+
+.high10 {
+  height: 10%;
+}
+
+.fullWidth {
+  width: 100%;
+}

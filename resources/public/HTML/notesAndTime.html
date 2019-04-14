@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <title>Notes And Time</title>
+      <meta charset="UTF-8">
+      <meta name='description' content='App for recording tickets for time worked at a job'>
+      <meta name='author' content='Andrew Morton'>
+      <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+      <link href='../CSS/mainStyling.css' type='text/css' rel='stylesheet'>
+      <link href='../CSS/notesAndTime.css' type='text/css' rel='stylesheet'>
+  </head>
+  <body>
+    <div id='title' class='fullWidth'>
+      <h1>Notes and Time Tracker</h1><br>
+      <p>Please note, this is still in<br>
+        active development.</p>
+    </div>
+
+    <div class='timeStamps fullWidth high10'>
+      <div id='startTimeStamp'><p>Start Time: </p></div>
+      <div id='endTimeStamp'><p>End Time: </p></div>
+      <div id='totalTime'><p>Total (mins): </p></div>
+    </div>
+
+    <div id='notesAndTimeForm'>
+      <form id='notesForm'>
+        <input type='text' name='contactName' value='Contact Name: '>
+        <input type='text' name='problem' value='Problem: '>
+        <input type='text' name='remote' value='Remote: '>
+        <input type='text' name='environment' value='Env: '><br>
+        <textarea form='notesForm' name='actions' rows='10' cols='50'>Actions: </textarea><br>
+        <textarea form='notesForm' name='nextSteps' rows='10' cols='50'>Next Steps: </textarea><br>
+        <input id='reset' type='reset'>
+        <input id='save' type='submit' value='Save'>
+      </form>
+    </div>
+  </body>
+</html>

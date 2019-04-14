@@ -1,0 +1,4 @@
+#Ignore for TimeLord
+.idea
+.lein-repl-history
+/timelord.iml

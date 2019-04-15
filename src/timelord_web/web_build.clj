@@ -1,6 +1,7 @@
 (ns timelord_web.web_build
   (:require [timelord_web.page_data :as pages]
             [timelord_db.timelord_auth.auth :as auth]
+            [logging_interface.log :as log]
             [ring.util.response :as ring]))
 
 ;;Calls the functions that provide html to web at timelord.core via timelord_web.routes
@@ -27,5 +28,6 @@
     (if (nil? password)
       (pages/login (pages/password-error)))
 
+    (log/info ::check-login-form "Successful login." {:username username})
     (ring/redirect (str "/tracker/" username))))
 

@@ -28,7 +28,7 @@
   (route/resources "/")
   (route/not-found "Not Found"))
 
-
+;;allows form parameters to come through HTTP request
 (def timelord
   (wrap-params timelord-routes))
 

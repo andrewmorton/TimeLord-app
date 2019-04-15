@@ -38,13 +38,13 @@
   [type log-map]
 
   (if (= 'error type)
-    (spit "/logging_interface/logs/error.log" (str "ERROR: " log-map "\n") :append true))
+    (spit "error.log" (str "ERROR: " log-map "\n") :append true))
   (if (= 'info type)
-    (spit "/logging_interface/logs/info.log" (str "INFO: " log-map "\n") :append true))
+    (spit "info.log" (str "INFO: " log-map "\n") :append true))
   (if (= 'trace type)
-    (spit "/logging_interface/logs/trace.log" (str "TRACE: " log-map "\n") :append true))
+    (spit "trace.log" (str "TRACE: " log-map "\n") :append true))
   (if (= 'warn type)
-    (spit "/logging_interface/logs/warnings.log" (str "WARN: " log-map "\n") :append true)))
+    (spit "warnings.log" (str "WARN: " log-map "\n") :append true)))
 
 
 ;;functions for convenience. Log functions are returning a map by default to allow for possible integration with

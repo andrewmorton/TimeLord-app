@@ -44,7 +44,7 @@
 (defn login
   "login page for timelord.
   Error is only to append errors to login page."
-  ([& error]
+  ([error]
 
    (let [login-header (simple-header "Login Page")
          login-css (hWrite/include-css "/CSS/login.css" "/CSS/mainStyling.css")
@@ -83,8 +83,9 @@
   (login "")))
 
 ;;password error div for login
-(def password-error
+(defn password-error
   "creates an error div to attach to login screen."
+  []
   (hWrite/html5
     [:div.loginErrors
      [:p "TimeLord encountered an error with the password provided, please verify the following:"]
@@ -93,8 +94,9 @@
       [:li "Password must contain at least 1 special character."]]]))
 
 ;;username error div for login
-(def username-error
+(defn username-error
   "creates an error div to attach to login screen."
+  []
   (hWrite/html5
     [:div.loginErrors
      [:p "TimeLord encountered an error with the username provided, please verify the following:"]

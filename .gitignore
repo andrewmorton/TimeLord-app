@@ -1,4 +1,11 @@
-#Ignore for TimeLord
-.idea
-.lein-repl-history
-/timelord.iml
+/target
+/lib
+/classes
+/checkouts
+pom.xml
+pom.xml.asc
+*.jar
+*.class
+/.lein-*
+/.nrepl-port
+/.idea*

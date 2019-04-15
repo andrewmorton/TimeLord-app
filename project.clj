@@ -1,4 +1,4 @@
-(defproject timelord "0.0.1" 
+(defproject timelord "0.0.1"
   :description "A web app to track notes and time for cases and provides a game and incentives for tracking time"
   :url "http://timelord/"
   :min-lein-version "2.0.0"

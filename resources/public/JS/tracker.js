@@ -1,12 +1,5 @@
-const RESETBUTTON = document.querySelector('input#reset');
-
+//JavaScript functions for tracker page
 function resetTextAreas () {
-  let textActions = document.querySelector('textarea#textActions');
-  let textNextSteps = document.querySelector('texarea#textNextSteps');
-
-  textActions.content = "";
-  textNextSteps.content = "";
+  document.getElementById('textActions').value = "";
+  document.getElementById('textNextSteps').value = "";
 }
-
-
-RESETBUTTON.addEventListener('onclick', resetTextAreas(), false);

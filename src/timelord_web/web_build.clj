@@ -2,7 +2,8 @@
   (:require [timelord_web.page_data :as pages]
             [timelord_db.timelord_auth.auth :as auth]
             [logging_interface.log :as log]
-            [ring.util.response :as ring]))
+            [ring.util.response :as ring])
+  (:gen-class))
 
 ;;Calls the functions that provide html to web at timelord.core via timelord_web.routes
 ;;web-build passes user data to auth if necessary, and calls basic pages
@@ -24,10 +25,10 @@
         username (:username result)
         password (:password result)]
     (if (nil? username)
-      (pages/login (pages/username-error)))
+        (pages/login (pages/username-error)))
     (if (nil? password)
-      (pages/login (pages/password-error)))
+        (pages/login (pages/password-error)))
 
-    (log/info ::check-login-form "Successful login." {:username username})
+    (log/info ::check-login-form "Successful login" {:username username :metric 1 :tags ['http 'auth 'login]})
     (ring/redirect (str "/tracker/" username))))
 

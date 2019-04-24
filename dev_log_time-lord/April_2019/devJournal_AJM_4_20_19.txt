@@ -1,0 +1,14 @@
+:Backend notes
+
+
+:Frontend notes
+
+
+:Database notes
+	- Decided to use standard naming convention for DB columns since wordWord is harder to read.
+	- Specifically will use letter_Word_word_word naming
+	- Created tables for DB
+	- Saved current table sql to file DB_schema in devJournal.
+:General
+
+

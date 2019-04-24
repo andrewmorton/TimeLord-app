@@ -1,0 +1,16 @@
+:Backend notes
+
+
+:Frontend notes
+
+
+:Database notes
+
+
+:General
+	- added info logging to user login if successful
+	- Added error logging to invalid-username and invalid-password
+	- Verified that I can get logs now, but not to any directory only to root
+	- Will adjust that at a later date
+	- For now, logs will just live in the root
+	- 

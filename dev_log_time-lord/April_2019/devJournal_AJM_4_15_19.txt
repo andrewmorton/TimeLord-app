@@ -1,0 +1,22 @@
+:Backend notes
+	- Yesterday created the logging interface
+	- Has 4 functions, error, warn, trace, info
+	- All of the functions are pretty much the same right now
+	- Created the functions to produce the log-map of data, in the future this can be routed to a logging application such as Riemann
+	- Functions all pass their maps to log-handler, which currently only spits out to file but will be able to send the maps elsewhere at a later
+	date
+
+
+:Frontend notes
+	- Added a log statement to check-user-login for a successful login, hopefully this will be the first logging statement!
+
+
+
+:Database notes
+
+
+:General
+	- Sent logs just to time-lord route due to I/O exception that I don't want to chase yet
+	- Updated the main project so that logging_interface can now be used
+
+

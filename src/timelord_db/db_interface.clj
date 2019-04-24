@@ -1,1 +1,1 @@
-(ns timelord-db.db-interface)
+(ns timelord_db.db-interface)

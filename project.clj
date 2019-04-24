@@ -6,7 +6,7 @@
                  [compojure "1.6.1"]
                  [ring "1.7.1"]
                  [hiccup "1.0.5"]
-                 [org.clojure/java.jdbc "0.6.0"]]
+                 [org.jdbi.jdbi3-bom"3.7.0"]]
   :plugins [[lein-ring "0.12.5"]]
   :ring {:handler timelord_web.routes/timelord}
   :profiles  {:dev {:dependencies [[javax.servlet/servlet-api "2.5"]

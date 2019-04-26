@@ -1,2 +1,0 @@
-INFO: {:host "localhost", :time "Fri Apr 19 07:32:27 EDT 2019", :service :timelord_web.web_build/check-login-form, :severity :info, :description "Successful login", :username "test", :metric 1, :tags [http auth login]}
-INFO: {:host "localhost", :time "Fri Apr 19 07:32:27 EDT 2019", :service :timelord_web.page_data/tracker-form, :severity :info, :description "Serving Tracker Form to user.", :metric 1, :tags [app form pages http]}

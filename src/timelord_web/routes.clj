@@ -46,4 +46,4 @@
 
 
 ;;;;Info log on startup
-(info ::routes "Routing service online." {:metric 0 :tags ['info 'status]})
+(log/info ::routes "Routing service online." {:metric 0 :tags ['info 'status]})

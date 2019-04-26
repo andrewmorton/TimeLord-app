@@ -10,7 +10,7 @@
   Ignores all other arguments.
   If no argument given, throws error."
   ([params]
-    {:userName (params "userName") :password (params "password")})
+   {:userName (params "userName") :password (params "password")})
 
   ([]
-    (throw (Exception. "No params given to login-parse"))))
+   (throw (Exception. "No params given to login-parse"))))

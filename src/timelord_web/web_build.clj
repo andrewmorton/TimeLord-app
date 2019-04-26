@@ -41,5 +41,5 @@
 
 
 ;;;;Info log on startup
-(info ::web_build "Web-builder online." {:metric 0 :tags ['info 'status]})
+(log/info ::web_build "Web-builder online." {:metric 0 :tags ['info 'status]})
 

@@ -1,28 +1,49 @@
-(ns timelord_db.interface)
+(ns timelord_db.interface
+  (:require [clojure.java.jdbc :as jdbc]
+            [logging_interface.log :as log]
+            [timelord_db.connection :as db]))
 
-(defn random-int
-  "Returns a random int from 1 to 10000.
+;;===============================================
+;;============= Prepare and Execute =============
+;;===============================================
+(defn attach-random-int
+  "Consumes a name and returns it with a random int from 1 to 10000.
   Should help reduce likelihood of functions preparing with the same name in PostgreSQL if put in front of the statement."
-  []
+  [name]
 
-  (int  (. Math floor (* 10000 (. Math random)))))
+  (let [int (int  (. Math floor (* 10000 (. Math random))))
+        name (str name "_" int)]
+    name))
 
-(defn select-user
-  "selects a column for a test from db-pg."
-  [[db value]]
-  (let [db db
-        value value
-        statement (str "select_user" (random-int))]
+(defn execute
+  "Executes a prepared statement."
+  [referring values]
+
+  (try
+    (jdbc/query db/db-pg-spec ["EXECUTE " referring values])
+    (catch Exception e (log/error ::execute e {:metric 1 :tags ['db 'execute 'error]}))))
+
+(defn prepare
+  "Consumes a SQL statement and the name of a referring function and prepares PostgreSQL to execute the statement"
+  [referring statement values]
+  (let [referring (attach-random-int referring)
+        statement statement
+        values values]
     (try
-      (jdbc/query db [(str "PREPARE " statement "(text)" "AS SELECT * FROM timelord_user WHERE username = $1;")])
-      (catch Exception e (log/error ::select-user-prepare (str e) {:metric 1 :tags ['db 'select 'prepare 'try-block]})))
-
+      (jdbc/query db/db-pg-spec ["PREPARE " referring statement])
+      (catch Exception e
+        (log/error ::prepare e {:metric 1 :tags ['prepare 'error 'db]})))
     (if-not Exception
-      (do (try
-            (jdbc/query db [(str "EXECUTE " statement "('" value "')")])
-            (catch Exception e (log/error ::select-user-execute (str e) {:metric 1 :tags ['db 'execute 'try-block]})))
-          (log/info ::select-user "User Select Successful" {:metric 1 :tags ['db 'execute 'try-block]}))
-      (log/error ::select-user "Select-user returned an error." {:metric 1 :error Exception :tags ['db 'execute 'try-block]}))))
+      (execute referring values))))
+
+;;===============================================
+;;========= End Prepare and Execute =============
+;;===============================================
+
+
+
+
+
 
 
 
@@ -32,4 +53,4 @@
 
 
 ;;;;Info log on startup
-(info ::db-interface "DB interface online." {:metric 0 :tags ['info 'status]})
+(log/info ::db-interface "DB interface online." {:metric 0 :tags ['info 'status]})

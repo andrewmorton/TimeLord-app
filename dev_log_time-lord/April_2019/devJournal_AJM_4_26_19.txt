@@ -29,7 +29,11 @@
 	- Added an info logging statment to the bottom of most important namespaces to let me know if they compiled all the way properly. This can be transitioned into log entries when the app is in production and "services" start up.
 	- Started the process of dispersing logging statments throughout the app and adding in some important try/catch blocks
 	- Continuing development I will try to input logging statements as often as is appropriate so I don't have to go back and update later.  
-	
+	- Decided to just go with jdbc for now since I can find documentation on how to implement it in clojure
+	- Will try to move to JDBI at another time, but I don't want to mess with setting up a datasource just yet
+	- Updated Auth to add space for general exception handling
+	- updated db-connection to have appropriate db-spec
+	- updated db-interface and created prepare and execute that should prepare and execute statements	
 
 Next Steps:
 - Will try to create select, insert, update, and delete statments that Postgres will accept as prepared statements in db.interface

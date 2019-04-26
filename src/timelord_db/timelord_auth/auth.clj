@@ -2,6 +2,16 @@
   (:require [timelord_db.parse :as parse]
             [logging_interface.log :as log]))
 
+;;===============================================
+;;============= General Exceptions===============
+;;===============================================
+
+
+
+;;===============================================
+;;============= Auth for Web-Build ==============
+;;===============================================
+
 ;;Function: regexp-bool
 ;;Create a function that will return true or false in the case of a regexp
 ;;if a string is returned, return true
@@ -29,20 +39,15 @@
     true
     false))
 
-
 ;;Function: invalid-password
 ;;Creates a function that returns true if password is less than 6 chars or does NOT have a special character
-;;
 (defn invalid-password
   "Returns true if password matches parameters."
   [password]
 
-  (if-not (or (regexp-bool (re-find #".{6}" password))
-              (regexp-bool (re-find #"\W" password)))
+  (if-not (or (regexp-bool (re-find #".{6}" password)) (regexp-bool (re-find #"\W" password)))
     true
     false))
-
-
 
 (defn validate-login-credentials
   "Expects a full HTTP request and pulls out params. Verifies information provided via login form.
@@ -66,10 +71,9 @@
             {:username nil :password nil})
         {:username username}))))
 
-
-
-
-
+;;===============================================
+;;============= End web-build Auth===============
+;;===============================================
 
 ;;;;Info log on startup.
-(info ::auth "Auth service online." {:metric 0 :tags ['info 'status]})
+(log/info ::auth "Auth service online." {:metric 0 :tags ['info 'status]})

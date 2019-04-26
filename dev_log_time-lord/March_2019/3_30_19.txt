@@ -1,0 +1,17 @@
+:Backend notes
+
+
+:Frontend notes
+	- changed header function back to simple header
+	- May require (hiccup.page/html5) in order to actually put out the way that I was planning
+	- Added middleware rind.middleware.params to run-app, but it doesn't seem to have made a difference
+	- Frontend interface is serving pages just fine, but I can't get at the POST data on the login form
+	- GET data will provide the query string just fine
+	- Started a regexp to provide an error if the username provided contains any special characters 
+
+:Database notes
+
+
+:General
+	- Seems that Ring doesn't provide POST params by default
+	

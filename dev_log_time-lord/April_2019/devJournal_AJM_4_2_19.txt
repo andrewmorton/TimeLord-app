@@ -1,0 +1,16 @@
+:Backend notes
+	- Created logic checking for username and password on check-user page
+	- if check-user page encounters an error with username or password, then returns the user to login page with an error appended to the bottom of the page
+	- Created functions invalid-username and invalid-password that check password and username according to same parameters of Javascript form checking
+	- Added these functions to the check-user page function
+
+:Frontend notes
+	- added JavaScript to login page so that attributes of the username and password will be readonly if JavaScript is disabled
+	- Added JavaScript to freeze username and password inputs so id cannot be changed using JavaScript (would get around JavaScript Validation)
+
+:Database notes
+
+
+:General
+
+

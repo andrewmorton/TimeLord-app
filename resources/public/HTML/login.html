@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name='description' content='App for recording tickets for time worked at a job'>
+    <meta name='author' content='Andrew Morton'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <link href='../CSS/mainStyling.css' type='text/css' rel='stylesheet'>
+    <link href='../CSS/login.css' type='text/css' rel='stylesheet'>
+  </head>
+
+
+  <body>
+    <div id='loginBoxForm'>
+        <img src=''>
+        <h2>Login: </h2>
+      <div>
+          <form id='loginForm' class='fullWidth'>
+              <label for='userName'>Username</label><br>
+              <input id='userName' type='text' name='userName'><br>
+              <span id=userNameError></span>
+
+              <label for='password'>Password</label><br>
+              <input id='password' type='password' name='password'><br>
+              <span id=passwordError></span>
+              <!-- <a href='./notesAndTime.html'>Login</a> -->
+              <input id='submitButton' type='submit' value='Login' action='./notesAndTime.html' method='post'>
+          </form>
+      </div>
+    </div>
+  </body>
+</html>

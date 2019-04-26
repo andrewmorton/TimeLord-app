@@ -1,0 +1,40 @@
+:Backend notes
+	- added select user function to the interface, this is just for testing and will be updated to a select function shortly
+	- Decided to use all prepared statements when applicable in the app. Interface will create the queries, then another function will actually prepare and execute statements afterwards
+	- created timelord_db.connection in source, this is where the db connection will live
+	- Can also add other db at a later date, but don't anticipate doing this
+	- Refactored logging again, having a good logging interface that other people can understand and use is very important to me for this project, especially since I've worked with software that has extremely unhelpful logging
+	- Removed log-handler in favor of a file-logger function
+	- Abstracted file-logger to create different file-logger types: info, warn, trace, error
+	- Overhauled the trace logging statement, it now accepts additional criteria if provided but will just give a description of "Made it." if only the service is specified
+	- This is because the trace is likely to be used for troubleshooting rather than actual logging that is visible by users
+ 
+
+:Frontend notes
+
+
+:Database notes
+	- Yesterday was able to get the DB to query successfully
+	- Needed to update the user roles in PostgreSQL
+	- Created an 'app_user_role' that will be inherited by other users
+	- Set All priveliges on All tables to app_user_role, revoke login
+	- Created timelord_app_user role, added to app_user_role and set with Login and Inherit rights
+	- Updated pg_hba.cfg to allow timelord_app_user to access the app via localhost with a password, currently in the timelord_db.connection source because its fun :).
+	- Am able to successfully query the DB now that the user roles are created
+	- These will need to be tightened up later, but should work for now
+	- Created a random int function that returns a random int from 1 - 10000. This will be attached to the function that prepares statements, thoughts being that there will be much less risk of collision with prepared statements if each one can have a unique number while it is executing. Not sure if this is necessary or not
+	 
+
+:General
+	- Added an info logging statment to the bottom of most important namespaces to let me know if they compiled all the way properly. This can be transitioned into log entries when the app is in production and "services" start up.
+	- Started the process of dispersing logging statments throughout the app and adding in some important try/catch blocks
+	- Continuing development I will try to input logging statements as often as is appropriate so I don't have to go back and update later.  
+	
+
+Next Steps:
+- Will try to create select, insert, update, and delete statments that Postgres will accept as prepared statements in db.interface
+- Will then add logic to login page code to check if a username entered is a new user, and if so offer to create a user
+- Will want to figure out user sessions shortly as well, not sure if that will be finished by the time I have users testing though
+- Will need to allow a user to save a note in the DB on the tracker page
+- Will add some basic styling to the app to prep for maiden voyage with some users
+- Need to add JavaScript validation for the tracker form to prevent empty field data

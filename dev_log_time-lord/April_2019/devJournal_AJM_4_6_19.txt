@@ -1,0 +1,20 @@
+:Backend notes
+	- created a parser file as well, this will pull information out of forms or other bits of data if needed and send it back to the function that called it
+	- if data needs to be verified, the function that calls parser will pass that data over to auth in order to verify
+	- parser will not do anything except for pull information out of data if necessary so the rest of the app can work on the data.
+
+:Frontend notes
+	- Reworked page_data.check-user so that information will be passed to auth in order to be validated. Based on the responses of auth, check-login-form will now send login errors back to the user, if the username is valid and confirmed by the db then the user will be directed to the tracker page, if username is valid but does not currently exist, check-login-form will send the user to the create user form, which should then allow the user to login successfully to tracker
+	-updated the login form so that it now posts to check-login instead of check-user 
+
+
+:Database notes
+	- Created timelord_db to prepare for coding the db interface
+	- Created timelord_db.timelord_auth in order to handle all of the authorization of parameters that needs to happen in the app
+	- any verification of data where I need to parse/encode/make sure the data is valid will be passed to auth to be validated
+	- auth will then be able to pass that information to the db interface where the final selects/updates/inserts will be made
+
+:General
+	- If I set up a map of patterns for Regexes, then I can give (re-find) one of the map keys as the regex and it will work fine.
+	- I need to be much more verbose with my comments. The check-user-login on auth is an example of how I want to do comments, at a minimum, from now on
+	- New app settings seems to work, tomorrow I will begin setting up the DB interface!

@@ -1,0 +1,11 @@
+:Backend notes
+
+
+:Frontend notes
+	- Adding logic to check username for special characters, not sure if JavaScript or clojure.....JavaScript may be easier
+
+:Database notes
+
+
+:General
+

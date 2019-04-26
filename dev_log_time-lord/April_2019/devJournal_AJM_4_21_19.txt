@@ -1,0 +1,109 @@
+:Backend notes
+
+
+:Frontend notes
+
+
+:Database notes
+	- Created tables for users, chat, transactions, and points
+	- I want to alter tables so that the date_submitted columns and time_submitted columns will automatically populate when that information is added to the table
+	
+
+
+:General
+	- Believe that it would be a good idea to create a new namespace for Global Java interop variables and functions so that I can have multiple sections of the app access them easier
+	- Will add a current date, current time variable to Global Java interop
+	- Still need to update logging so that the logger will check for file size when writing new log entries
+
+
+
+
+================================================
+========= Table Schema as of 4_21_19 ===========
+================================================
+
+CREATE TABLE timelord_user (
+user_uuid UUID PRIMARY KEY DEFAULT uuid_generate_v1(),
+user_key serial NOT NULL UNIQUE,
+username VARCHAR(30) UNIQUE NOT NULL,
+password VARCHAR(60) NOT NULL,
+first_name VARCHAR(30) NOT NULL,
+last_name VARCHAR(30) NOT NULL,
+date_created DATE NOT NULL DEFAULT current_date,
+time_created TIME NOT NULL DEFAULT localtime(0),
+last_login_date DATE NOT NULL,
+last_login_time TIME NOT NULL);
+
+CREATE TABLE user_points (
+user_uuid_fk UUID PRIMARY KEY REFERENCES timelord_user(user_uuid) ON UPDATE CASCADE,
+points INT NOT NULL DEFAULT 0);
+
+=========================================
+
+-- User transaction tables
+
+CREATE TABLE user_spending (
+key serial PRIMARY KEY,
+username VARCHAR(30) NOT NULL REFERENCES timelord_user(username) ON DELETE CASCADE,
+date_submitted DATE NOT NULL default current_date ,              
+time_submitted TIME NOT NULL default localtime(0),
+source VARCHAR(30) NOT NULL,
+purchase VARCHAR(30) NOT NULL,
+amount INT NOT NULL,
+resulting_balance INT NOT NULL);
+
+CREATE TABLE user_addition (
+key serial PRIMARY KEY,
+username VARCHAR(30) NOT NULL REFERENCES timelord_user(username) ON DELETE CASCADE,
+date_submitted DATE NOT NULL DEFAULT current_date,
+time_submitted TIME NOT NULL DEFAULT localtime(0),
+source VARCHAR(30) NOT NULL,
+amount INT NOT NULL,
+resulting_balance INT NOT NULL,
+note_key INT UNIQUE NOT NULL REFERENCES note_content(key));
+
+
+=========================================
+-- User Note tables
+
+CREATE TABLE note_log (
+key serial PRIMARY KEY,
+username VARCHAR(30) NOT NULL REFERENCES timelord_user(username) ON DELETE CASCADE,
+date_submitted DATE NOT NULL DEFAULT current_date,               
+time_submitted TIME NOT NULL DEFAULT localtime(0),
+note_key INT NOT NULL REFERENCES note_content(key));
+
+CREATE TABLE note_content (
+key serial PRIMARY KEY,
+username VARCHAR(30) NOT NULL REFERENCES timelord_user(username) ON DELETE CASCADE,
+start_time TIME NOT NULL,
+end_time TIME NOT NULL,
+total_minutes INT NOT NULL,
+contact VARCHAR(50) NOT NULL,
+problem VARCHAR(100) NOT NULL,
+remote BOOLEAN NOT NULL,
+remote_method VARCHAR(50) NOT NULL,
+environment VARCHAR(30) NOT NULL,
+actions TEXT NOT NULL,
+next_steps TEXT NOT NULL);
+
+
+========================================
+--Chat content tables
+
+CREATE TABLE chat_content (
+key serial PRIMARY KEY,
+content TEXT);
+
+CREATE TABLE chat_log (
+key serial PRIMARY KEY,
+chat_content_fk INT NOT NULL REFERENCES chat_content(key) ON DELETE CASCADE,
+sender VARCHAR(30) NOT NULL REFERENCES timelord_user(username) ON DELETE CASCADE,
+recipient VARCHAR(30) NOT NULL,
+date_sent DATE NOT NULL DEFAULT current_date,
+time_sent TIME NOT NULL DEFAULT localtime(0));
+
+
+
+
+

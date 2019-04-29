@@ -1,0 +1,19 @@
+:Backend notes
+	- Refactored Auth a bit, now checks username and password and returns a map if checks are successful
+	- condensed validate-login-credentials a bit as well
+	- updated the invalid login and password functions to be a bit more condensed
+	- decided to forego the JDBI for now and will try to just get the first instance of the app up with clojure's jdbc
+	- Still am having a bit of difficulty with prepared selects, this will be something that I'll have to work on and tighten up in later iterations
+
+
+:Frontend notes
+
+
+:Database notes
+	- Updated the DB schema, can use (some #{column-name} db-schema) to pull back column names from the schema
+	- The above is clunky, and I can do better, but I'd like a way to represent the db as a data structure to make updating it easier
+	- Updated the DB interface a bit, created a basic select statement, then created a select-user statement to use for the login screen
+
+:General
+
+

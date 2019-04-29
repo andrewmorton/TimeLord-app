@@ -21,9 +21,7 @@
   /tracker/:user if username and password have passed."
   [request]
 
-  (let [result (auth/validate-login-credentials request)
-        username (:username result)
-        password (:password result)]
+  (let [{:keys [username password]} (auth/validate-login-credentials request)]
 
     (if (nil? username)
       (pages/login (pages/username-error))

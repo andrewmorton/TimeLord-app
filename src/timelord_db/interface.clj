@@ -15,33 +15,30 @@
         name (str name "_" int)]
     name))
 
-(defn execute
-  "Executes a prepared statement."
-  [referring values]
 
-  (try
-    (jdbc/query db/db-pg-spec ["EXECUTE " referring values])
-    (catch Exception e (log/error ::execute e {:metric 1 :tags ['db 'execute 'error]}))))
-
-(defn prepare
-  "Consumes a SQL statement and the name of a referring function and prepares PostgreSQL to execute the statement"
-  [referring statement values]
-  (let [referring (attach-random-int referring)
-        statement statement
-        values values]
-    (try
-      (jdbc/query db/db-pg-spec ["PREPARE " referring statement])
-      (catch Exception e
-        (log/error ::prepare e {:metric 1 :tags ['prepare 'error 'db]})))
-    (if-not Exception
-      (execute referring values))))
 
 ;;===============================================
 ;;========= End Prepare and Execute =============
 ;;===============================================
 
+;;===============================================
+;;============ SELECT STATEMENTS ================
+;;===============================================
 
 
+(defn select-statement
+  "Consumes a db spec, a table name, and the params needed to perform a select statement."
+  [db column table value]
+
+  (try (jdbc/query db [(str "SELECT " column " FROM " table " WHERE " column " = ?;") value])
+       (catch Exception e
+         (log/error ::select-username e {:metric 1 :tags ['select 'db 'query 'error]}))))
+
+(defn select-username
+  "Consumes a username and returns username from the DB."
+  [username]
+
+  (select-statement (db-pg-spec) "username" "timelord_user" username))
 
 
 

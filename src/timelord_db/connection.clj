@@ -13,9 +13,10 @@
    :password "Old nail testing Blubbers!"})
 
 (try
-  (jdbc/db-connection db-pg-spec)
+  (jdbc/db-connection (db-pg-spec))
   (catch Exception e
-    (log/error ::db-connection "Error connecting to Database." {:metric 1 :error-text e :tags ['db 'error 'connect]})))
+    (let [{error :cause} e]
+      (log/error ::db-connection "Error connecting to Database." {:metric 1 :cause error :tags ['db 'error 'connect]}))))
 
 
 

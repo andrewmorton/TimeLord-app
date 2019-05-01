@@ -1,0 +1,23 @@
+:Backend notes
+
+
+:Frontend notes
+
+
+:Database notes
+	- For the flow of validating a user:
+		- User submits credentials
+		- JavaScript first checks that passwords have a special character and username does not
+		- Web-build then calls Auth which checks the same data the same way
+			- Auth calls invalid-username? and invalid-password? on the supplied credentials
+			- If username or password are invalid, Auth returns true for those functions, and web-build should redirect to login screen with informative errors regarding credentials.
+		- If invalid-username? and invalid-password? are both false, then data is valid and is sent to a new auth function
+		- Within new auth function,  db-interface tries to pull the user's record back from the db using the supplied username.
+			- IF username does not exist, web-build should redirect to a "new user page" so that the user can be created
+			- new user page will also check the user's password and criteria, can copy this from login
+		- If the record IS there, then auth should check the user's supplied password with the hash in the DB for that user account
+		- If the hash matches the user's supplied password, then web-build redirects to /tracker/:user to gain access to the app.
+
+:General
+
+

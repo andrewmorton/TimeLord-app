@@ -23,7 +23,7 @@
     (web-build/tracker user))
 
   (POST "/check-login" request
-    (web-build/check-login-form request))
+    (web-build/check-login-credentials request))
   
   (route/resources "/")
   (route/not-found (do (log/error ::route "Not Found" {:metric 1 :tags ['error 'http 'routing 'not-found]})

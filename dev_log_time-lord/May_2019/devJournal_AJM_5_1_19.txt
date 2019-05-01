@@ -1,0 +1,18 @@
+:Backend notes
+	- Changed up the check user login function in web-build
+	- Split the function up between valid-credentials? and valid-login-with-db?
+	- New functions handle the redirects and the logging using auth
+	- Still need to make the db functions to check info in the db for the login
+	- also removed an unnecessary function in auth, the 2 new web-build functions basically do the same but better and are easier to follow
+	
+
+:Frontend notes
+	- need to create a new invalid login page for when a user logs in with the wrong password
+
+:Database notes
+	- Need to create auth/db-username? which returns true if the username exists in the db
+	- Need to create auth/db-password-matches? which returns true if the password supplied matches the hash in the db
+
+:General
+
+

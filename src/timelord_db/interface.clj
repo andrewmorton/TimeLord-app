@@ -6,16 +6,9 @@
 ;;===============================================
 ;;============= Prepare and Execute =============
 ;;===============================================
-(defn attach-random-int
-  "Consumes a name and returns it with a random int from 1 to 10000.
-  Should help reduce likelihood of functions preparing with the same name in PostgreSQL if put in front of the statement."
-  [name]
-
-  (let [int (int  (. Math floor (* 10000 (. Math random))))
-        name (str name "_" int)]
-    name))
 
 
+;;later add functions to do true prepared statements using PostGres, not relying on JDBC
 
 ;;===============================================
 ;;========= End Prepare and Execute =============
@@ -27,19 +20,27 @@
 
 
 (defn select-statement
-  "Consumes a db spec, a table name, and the params needed to perform a select statement."
+  "Consumes a DB spec, a table name, and the params needed to perform a select statement.
+  Returns a clojure map of the result."
   [db column table value]
-
-  (try (jdbc/query db [(str "SELECT " column " FROM " table " WHERE " column " = ?;") value])
+  (try (first (jdbc/query db [(str "SELECT " column " FROM " table " WHERE " column " = ?;") value]))
        (catch Exception e
          (log/error ::select-username e {:metric 1 :tags ['select 'db 'query 'error]}))))
 
-(defn select-username
-  "Consumes a username and returns username from the DB."
+(defn pg-select-username
+  "Consumes a username and returns username column from the DB."
   [username]
+  (select-statement (db/db-pg-spec) "username" "timelord_user" username))
 
-  (select-statement (db-pg-spec) "username" "timelord_user" username))
+(defn pg-select-password
+  "Consumes a username and returns the DB value for user's password."
+  [username]
+  (select-statement (db/db-pg-spec) "password" "timelord_user" username))
 
+
+;;===============================================
+;;=========== END SELECT STATEMENTS =============
+;;===============================================
 
 
 

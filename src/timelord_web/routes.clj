@@ -2,10 +2,10 @@
   (:require [timelord_web.web_build :as web-build]
             [logging_interface.log :as log]
             [compojure.core :refer :all]
-            [compojure.route :as route])
-  (:use ring.util.response
-        ring.adapter.jetty
-        ring.middleware.params))
+            [compojure.route :as route]
+            [ring.util.response :as ring]
+            [ring.middleware.params :as mid-ring]
+            [ring.adapter.jetty :as jetty]))
 
 
 (defroutes timelord-routes; Routes for TimeLord app
@@ -13,7 +13,23 @@
 
   (GET "/"
     []
+    (ring/redirect "/login"))
+
+  (GET "/login"
+    []
     (web-build/login))
+
+  (GET "/login/username-error"
+       []
+    (web-build/login-username-error))
+
+  (GET "/login/password-error"
+       []
+    (web-build/login-password-error))
+
+  (GET "/login/invalid-password"
+       []
+    (web-build/login-invalid-password))
 
   ; (GET "/control-center"
   ;   []
@@ -31,17 +47,17 @@
 
 ;;allows form parameters to come through HTTP request
 (def timelord
-  (wrap-params timelord-routes))
+  (mid-ring/wrap-params timelord-routes))
 
 (defn run-timelord
   ([port]
    (try
-     (run-jetty timelord {:port port})
+     (jetty/run-jetty timelord {:port port})
      (catch Exception e (log/error ::run-timelord e {:metric 1 :tags ['error 'http 'routing 'port]}))))
 
 
   ([]
-   (run-jetty timelord {:port 8080})))
+   (jetty/run-jetty timelord {:port 8080})))
 
 
 

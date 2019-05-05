@@ -1,4 +1,5 @@
-(ns timelord_db.parse)
+(ns timelord_db.parse
+  (:require [logging_interface.log :as log]))
 
 ;;a parsing interface for TimeLord, converts form data into a map to be sent
 ;;to the rest of the application
@@ -9,8 +10,10 @@
   "Pulls username and password out of login page.
   Ignores all other arguments.
   If no argument given, throws error."
-  ([params]
-   {:userName (params "userName") :password (params "password")})
-
+  ([request]
+   (let [{params :params} request
+         username (get params "userName")
+         password (get params "password")]
+     {:username username :password password}))
   ([]
    (throw (Exception. "No params given to login-parse"))))

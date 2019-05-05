@@ -62,7 +62,13 @@
       [:li "Password must be at least 6 characters."]
       [:li "Password must contain at least 1 special character."]]]))
 
-
+;;error div for an invalid password
+(defn incorrect-password
+  "Creates an error div to attach to login screen when a password entered is wrong."
+  []
+  (hWrite/html5
+    [:div.loginErrors
+     [:p "Invalid password entered, please try again."]]))
 
 ;creates the login page
 (defn login
@@ -144,22 +150,15 @@
        [:input#reset {:type "reset" :value "Clear Form" :onclick "javascript:resetTextAreas();"}]
        [:input#save {:type "submit" :value "save"}]]))
 
-
-
-
-
 (defn tracker-form
   "Creates the form for the tracker page"
   []
-  (let [fields (tracker-form-fields)
-        text-areas (tracker-form-textareas)]
-
-    (log/info ::tracker-form "Serving Tracker Form to user." {:metric 1 :tags ['app 'form 'pages 'http]})
-    (hWrite/html5
-      [:div#tracker-form
-       [:form#tracker-form {:action "/submit-form" :method "POST"}
-         fields
-         text-areas]])))
+  (log/info ::tracker-form "Serving Tracker Form to user." {:metric 1 :tags ['app 'form 'pages 'http]})
+  (hWrite/html5
+    [:div#tracker-form
+     [:form#tracker-form {:action "/submit-form" :method "POST"}
+       (tracker-form-fields)
+       (tracker-form-textareas)]]))
 
 
 (defn tracker

@@ -1,42 +1,75 @@
 (ns timelord_db.interface
   (:require [clojure.java.jdbc :as jdbc]
+            [clojure.string :as str]
             [logging_interface.log :as log]
             [timelord_db.connection :as db]))
 
-;;===============================================
-;;============= Prepare and Execute =============
-;;===============================================
-
-
-;;later add functions to do true prepared statements using PostGres, not relying on JDBC
 
 ;;===============================================
-;;========= End Prepare and Execute =============
+;;============  DEFINING JDBC    ================
 ;;===============================================
+
+(def jdbc-f
+  (fn [f db statement]
+    (f db statement)))
+
+(defn pg-jdbc-f
+  [f statement]
+  (jdbc-f f (db/db-pg-spec) statement))
+
+(def query-pg-f
+  (partial pg-jdbc-f jdbc/query))
+
+(def insert-pg-f
+  (partial pg-jdbc-f jdbc/insert!))
+
+(def update-pg-f
+  (partial pg-jdbc-f jdbc/update!))
 
 ;;===============================================
 ;;============ SELECT STATEMENTS ================
 ;;===============================================
 
+(defn select-f
+  "Executes a select statement using jdbc/query in PG."
+  [select-statement]
+  {:pre [(re-find #"SELECT" (apply str select-statement))]}
+  (query-pg-f select-statement))
 
-(defn select-statement
-  "Consumes a DB spec, a table name, and the params needed to perform a select statement.
-  Returns a clojure map of the result."
-  [db column table value]
-  (try (first (jdbc/query db [(str "SELECT " column " FROM " table " WHERE " column " = ?;") value]))
-       (catch Exception e
-         (log/error ::select-username e {:metric 1 :tags ['select 'db 'query 'error]}))))
-
-(defn pg-select-username
-  "Consumes a username and returns username column from the DB."
+(defn select-username
+  "Selects a username from the DB. Returns a map of the username if it exists and nil if not."
   [username]
-  (select-statement (db/db-pg-spec) "username" "timelord_user" username))
+  (let [result (select-f ["SELECT username FROM timelord_user WHERE username = ?;" username])]
+    (cond
+      (empty? result) nil
+      :else result)))
 
-(defn pg-select-password
-  "Consumes a username and returns the DB value for user's password."
+(defn select-password
+  "Returns the hash of a user's password from the DB. If the password doesn't exist, returns nil."
   [username]
-  (select-statement (db/db-pg-spec) "password" "timelord_user" username))
+  (let [result (select-f ["SELECT password FROM timelord_user WHERE username = ?;" username])]
+    (cond
+      (empty? result) nil
+      :else result)))
 
+(defn hash-sql-string
+  "Returns the sql vector for jdbc with username, hash, and password accounted for"
+  [password hash username]
+  ["SELECT (password = crypt(?, ?)) AS result FROM timelord_user WHERE username = ?;" password hash username])
+
+(defn compare-hash
+  "compares a user's provided password with the DB hash for that user's password."
+  [username password]
+  (let [{hash :password} (first (select-password username))
+        {result :result} (first (select-f (hash-sql-string password hash username)))]
+    (if result
+      result
+      nil)))
+
+
+;Example of authentication:
+;SELECT (pswhash = crypt('entered password', pswhash)) AS pswmatch FROM ... ;
+;This returns true if the entered password is correct.
 
 ;;===============================================
 ;;=========== END SELECT STATEMENTS =============

@@ -1,0 +1,15 @@
+:Backend notes
+
+
+:Frontend notes
+
+
+:Database notes
+	- Decided to try and split up prepare and execute statements into a few functions to save typing and hopefully mistakes
+	- Created prepare-statement and execute! which create Strings of the SQL commands that will be passed to the DB
+	- Will want to put these together into a function that, ideally, will carry out the whole shebang at once when given an SQL SELECT INSERT UPADTE DELETE statement
+
+
+:General
+
+

@@ -1,0 +1,16 @@
+:Backend notes
+
+
+:Frontend notes
+
+
+:Database notes
+
+
+:General
+	- Seems that the issue with doing the prepared statements is that I may need to make the database connection a form with local scope, then use jdbc/prepared-statement conn "statment".
+	- Once that goes through, then in the same section, I should be able to run jdbc/execute! conn "statment name (values)"
+	- Will test this, but verified that I was able to create a successful prepared statement
+	- However, it seems that when the connection closes the prepared statment is deallocated, so the solution is to execute on the same connection
+	- (jdbc/prepare-statement (jdbc/get-connection (db/db-pg-spec)) "PREPARE set_password_prepared (text, text) AS UPDATE timelord_user SET password = crypt ( $1, gen_salt('bf', 8)) WHERE username = $2;")  <------- This should serve as a template
+

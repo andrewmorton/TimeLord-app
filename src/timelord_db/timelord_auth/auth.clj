@@ -1,37 +1,51 @@
 (ns timelord_db.timelord_auth.auth
-  (:require [timelord_web.web_build :as web-build]
-            [timelord_db.parse :as parse]
-            [timelord_db.interface :as db-interface]
+  (:require [timelord_db.interface :as db-interface]
             [logging_interface.log :as log]))
 
 ;;===============================================
-;;============= General Exceptions===============
+;;==     Username and Password checking        ==
 ;;===============================================
+(defn username-error
+  "logs a username error."
+  [service username]
+  (log/error
+    service
+    "Username contains spaces or Specials."
+    {:metric 1 :username username :tags ['http 'login 'username]}))
+
+(defn password-error
+  "logs a password error."
+  [service]
+  (log/error
+    service
+    "Password is less than 6 characters or lacks Specials."
+    {:metric 1 :tags ['http 'login 'password]}))
 
 
+(def reg-exp
+  (fn [expression string]
+    {:pre (string? string)}
+    (re-find expression string)))
 
-;;===============================================
-;;============= Auth for Web-Build ==============
-;;===============================================
-;;logging functions for username and password errors
-(defn log-username-error
-  "Logs a username specific error to error.log."
-  [username]
-  (log/error ::validate-login-credentials "Invalid Username." {:username username :tags ['auth 'http 'login]}))
+(def less-than-six?
+  "Tests a string for at least 6 characters."
+  (complement (partial reg-exp #".{6}")))
 
-(defn log-password-error
-  "Logs a password specific error to error.log"
-  []
-  (log/error ::validate-login-credentials "Invalid Password." {:tags ['auth 'http 'login]}))
-;;
+(def special-characters?
+  "Tests a string and makes sure there are no special characters in it."
+  (partial reg-exp #"\s|\W"))
+
+(def no-special-characters?
+  "tests a string and returns true if there are no special characters."
+  (complement special-characters?))
 
 (defn invalid-username?
-  "Returns true if username is invalid."
+  "Tests whether a username falls within parameters for the app."
   [username]
   (cond
-    (re-find #"\s|\W" username) (do (log-username-error username) true)
-    (re-find #".{4}" username) (do (log-username-error username) true)
-    :else false))
+    (less-than-six? username) (when (username-error ::invalid-username? username) true)
+    (special-characters? username) (when (username-error ::invalid-username? username) true)
+    :else nil))
 
 ;;Function: invalid-password
 ;;Creates a function that returns true if password is less than 6 chars or does NOT have a special character
@@ -39,15 +53,28 @@
   "Returns true if password is invalid."
   [password]
   (cond
-    (not (re-find #".{6}" password)) (do (log-password-error) true)
-    (not (re-find #"\W" password)) (do (log-password-error) true)
-    :else false))
+    (less-than-six? password) (when (password-error ::invalid-password?) true)
+    (no-special-characters? password) (when (password-error ::invalid-password?) true)
+    :else nil))
 
-(defn check-in-username
-  "Consumes a user supplied password and a DB hash for the same user.
-  Returns true if the password matches."
-  [user-password db-password])
 
+;;===============================================
+;;============= Auth for Web-Build ==============
+;;===============================================
+
+(defn db-username?
+  "Consumes a username and returns true if the username record is found in the DB."
+  [username]
+  (let [username username
+        username-db (db-interface/pg-select-username username)]
+    (if (= username username-db) true (do (username-error ::db-username? username) false))))
+
+(defn db-password-matches?
+  "Consumes a password and returns true if the supplied password matches the password in the DB."
+  [username password]
+  (if (db-interface/pg-validate-password username password)
+    true
+    (when (password-error ::db-password-matches?) false)))
 
 ;;===============================================
 ;;============= End web-build Auth===============

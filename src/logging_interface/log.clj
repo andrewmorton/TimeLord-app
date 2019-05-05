@@ -163,12 +163,13 @@
 
     (warn-file-logger log-map)))
 
+;;this can be much better, will come back to it eventually.
 (defn trace
   "Consumes a service and optionally a description or additional parameters and sends a trace log map to
   trace-file-logger."
-  ([service description {:as additional}]
+  ([service description]
    (let [log-body (trace-log-entry [service description])
-         log-additional additional
+         log-additional {:metric 1 :tags ['trace 'debug]}
          log-map (merge log-body log-additional)]
 
      (trace-file-logger log-map)))

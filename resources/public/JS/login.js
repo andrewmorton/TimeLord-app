@@ -32,7 +32,7 @@ function testFields ( event ) {
   let userName = FORMUSERNAME.value;
   let password = FORMPASSWORD.value;
   let error = document.querySelector('span.loginErrorSpan'); 
-  let result;
+  let result = false;
 
   error.innerHTML = '';
 
@@ -46,8 +46,8 @@ function testFields ( event ) {
     }
 
     //check whether username is at least 4 characters
-    if ( ! ( /.{4}/.test( userName ) ) ) {
-      error.innerHTML += "<li class='error'>Username must be at least 4 characters</li>";
+    if ( ! ( /.{6}/.test( userName ) ) ) {
+      error.innerHTML += "<li class='error'>Username must be at least 6 characters</li>";
       result = true;
     }
 
@@ -64,7 +64,7 @@ function testFields ( event ) {
 //Verifies that the supplied password is valid and matches parameters.
   function checkPassword ( password ) {
       //check for at least 6 characters in password field
-      if ( ! ( /\w{6}/.test( password ) ) ) {
+      if ( ! ( /.{6}/.test( password ) ) ) {
         error.innerHTML += "<li class='error' >Password less than 6 characters</li>";
         result = true;
       }

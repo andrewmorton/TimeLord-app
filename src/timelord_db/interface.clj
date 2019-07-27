@@ -1,6 +1,5 @@
 (ns timelord_db.interface
   (:require [clojure.java.jdbc :as jdbc]
-            [clojure.string :as str]
             [logging_interface.log :as log]
             [timelord_db.connection :as db]))
 
@@ -65,11 +64,6 @@
     (if result
       result
       nil)))
-
-
-;Example of authentication:
-;SELECT (pswhash = crypt('entered password', pswhash)) AS pswmatch FROM ... ;
-;This returns true if the entered password is correct.
 
 ;;===============================================
 ;;=========== END SELECT STATEMENTS =============

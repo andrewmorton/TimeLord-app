@@ -7,18 +7,18 @@
 ;;===============================================
 (defn username-error
   "logs a username error."
-  [service username]
+  [service string username]
   (log/error
     service
-    "Username contains spaces or Specials."
+    string
     {:metric 1 :username username :tags ['http 'login 'username]}))
 
 (defn password-error
   "logs a password error."
-  [service]
+  [service string]
   (log/error
     service
-    "Password is less than 6 characters or lacks Specials."
+    string
     {:metric 1 :tags ['http 'login 'password]}))
 
 
@@ -43,8 +43,8 @@
   "Tests whether a username falls within parameters for the app."
   [username]
   (cond
-    (less-than-six? username) (when (username-error ::invalid-username? username) true)
-    (special-characters? username) (when (username-error ::invalid-username? username) true)
+    (less-than-six? username) (username-error ::invalid-username? "Less than six characters." username)
+    (special-characters? username) (username-error ::invalid-username? "Contains Special Characters." username)
     :else nil))
 
 ;;Function: invalid-password
@@ -53,8 +53,8 @@
   "Returns true if password is invalid."
   [password]
   (cond
-    (less-than-six? password) (when (password-error ::invalid-password?) true)
-    (no-special-characters? password) (when (password-error ::invalid-password?) true)
+    (less-than-six? password) (password-error ::invalid-password? "Less than six characters.")
+    (no-special-characters? password) (password-error ::invalid-password? "No Special Characters.")
     :else nil))
 
 
@@ -66,15 +66,17 @@
   "Consumes a username and returns true if the username record is found in the DB."
   [username]
   (let [username username
-        username-db (db-interface/pg-select-username username)]
-    (if (= username username-db) true (do (username-error ::db-username? username) false))))
+        username-db (db-interface/select-username username)]
+    (if-not (and username username-db)
+      (do (username-error ::db-username? "Username not in Database." username) nil)
+      true)))
 
 (defn db-password-matches?
   "Consumes a password and returns true if the supplied password matches the password in the DB."
   [username password]
-  (if (db-interface/pg-validate-password username password)
-    true
-    (when (password-error ::db-password-matches?) false)))
+  (if-not (db-interface/compare-hash username password)
+    (do (password-error ::db-password-matches? "Password doesn't match Database record.") nil)
+    true))
 
 ;;===============================================
 ;;============= End web-build Auth===============
